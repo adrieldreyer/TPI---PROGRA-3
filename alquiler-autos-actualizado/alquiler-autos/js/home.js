@@ -1,4 +1,5 @@
-const apiUrl = "https://<TU-PROYECTO>.mockapi.io"; // remplazar con tu URL
+// API separadas
+const apiUsuarios = "https://6915021c84e8bd126af85e66.mockapi.io/Usuarios/"; // <-- reemplazá por tu endpoint real
 
 const user = JSON.parse(localStorage.getItem("user"));
 const loginContainer = document.getElementById("loginContainer");
@@ -23,7 +24,7 @@ if (user) {
     const password = document.getElementById("password").value.trim();
 
     try {
-      const res = await fetch(`${apiUrl}/users`);
+      const res = await fetch(`${apiUsuarios}/users`);
       const users = await res.json();
       const found = users.find(u => u.email === email && u.password === password);
 
@@ -37,7 +38,7 @@ if (user) {
       }
     } catch (err) {
       console.error(err);
-      alert("Error al conectar con el servidor.");
+      alert("Error al conectar con el servidor de usuarios.");
     }
   });
 }

@@ -1,4 +1,4 @@
-const apiUrl = "https://<TU-PROYECTO>.mockapi.io"; // reemplazá con tu endpoint
+const apiUsuarios = "https://6915021c84e8bd126af85e66.mockapi.io/Usuarios/"; // <-- reemplazá con tu endpoint real
 
 // Registro
 const registerForm = document.getElementById("registerForm");
@@ -10,7 +10,7 @@ if (registerForm) {
     const password = document.getElementById("password").value.trim();
 
     try {
-      await fetch(`${apiUrl}/users`, {
+      await fetch(`${apiUsuarios}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, email, password, role: "USUARIO" })

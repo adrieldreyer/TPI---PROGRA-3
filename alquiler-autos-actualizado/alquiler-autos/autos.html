@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Autos - Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/autos.js"></script>
+</head>
+<body>
+  <nav class="topnav">
+    <h2>Panel Admin - Autos</h2>
+    <div>
+      <a href="dashboard.html" class="btn-link">Dashboard</a>
+      <button id="logoutBtn" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h3>Agregar nuevo auto</h3>
+    <form id="formAuto">
+  <input type="text" id="marca" placeholder="Marca" required>
+  <input type="text" id="modelo" placeholder="Modelo" required>
+  <input type="number" id="precioDia" placeholder="Precio por día" required>
+
+  <!-- Ahora usamos checkbox para disponible (true/false) -->
+  <label>
+    <input type="checkbox" id="disponibleCheckbox" checked>
+    Disponible
+  </label>
+
+  <!-- Campo separado para indicar estado específico del auto -->
+  <label for="estadoAuto">Estado del auto</label>
+  <select id="estadoAuto">
+    <option value="disponible">Disponible</option>
+    <option value="alquilado">Alquilado</option>
+    <option value="en_reparacion">En reparación</option>
+  </select>
+
+  <button type="submit" id="submitAutoBtn">Guardar Auto</button>
+  <button type="button" id="cancelEditBtn" style="display:none;">Cancelar edición</button>
+</form>
+
+    <h3>Listado de autos</h3>
+    <div id="listaAutos" class="cards-container"></div>
+  </main>
+</body>
+</html>
