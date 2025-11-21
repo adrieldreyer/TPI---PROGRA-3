@@ -1,5 +1,5 @@
 // API separadas
-const apiUsuarios = "https://6915021c84e8bd126af85e66.mockapi.io/Usuarios/"; // <-- reemplazá por tu endpoint real
+const apiUsuarios = "https://6915021c84e8bd126af85e66.mockapi.io/Usuarios/";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const loginContainer = document.getElementById("loginContainer");

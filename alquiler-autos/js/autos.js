@@ -6,7 +6,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 const submitAutoBtn = document.getElementById("submitAutoBtn");
 
-// campos
+
 const marcaInput = document.getElementById("marca");
 const modeloInput = document.getElementById("modelo");
 const precioInput = document.getElementById("precioDia");
@@ -72,48 +72,42 @@ async function cargarAutos() {
   }
 }
 
-// enrollar submit: ÚNICO handler que decide POST o PUT según editMode
-if (formAuto) {
-  formAuto.addEventListener("submit", async (e) => {
-    e.preventDefault();
+formAuto.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const nuevo = {
-      marca: marcaInput.value.trim(),
-      modelo: modeloInput.value.trim(),
-      precioDia: Number(precioInput.value),
-      disponible: disponibleCheckbox.checked,
-      estadoAuto: estadoSelect.value || "normal"
-    };
+  const nuevo = {
+    marca: marcaInput.value.trim(),
+    modelo: modeloInput.value.trim(),
+    precioDia: Number(precioInput.value),
+    disponible: disponibleSelect.value === "true", // convertir string a boolean
+    estadoAuto: estadoSelect.value || "normal"
+  };
 
-    try {
-      if (editMode && idActual) {
-        // PUT -> actualizar
-        await fetch(`${apiNegocio}/cars/${idActual}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(nuevo)
-        });
-        alert("Auto actualizado");
-      } else {
-        // POST -> crear
-        await fetch(`${apiNegocio}/cars`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(nuevo)
-        });
-        alert("Auto creado");
-      }
-      // reset form y estado
-      cancelarEdicion();
-      cargarAutos();
-    } catch (err) {
-      console.error(err);
-      alert("Error al guardar el auto");
+  try {
+    if (editMode && idActual) {
+      await fetch(`${apiNegocio}/cars/${idActual}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevo)
+      });
+      alert("Auto actualizado");
+    } else {
+      await fetch(`${apiNegocio}/cars`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevo)
+      });
+      alert("Auto creado");
     }
-  });
-}
+    cancelarEdicion();
+    cargarAutos();
+  } catch (err) {
+    console.error(err);
+    alert("Error al guardar el auto");
+  }
+});
 
-// función editar: carga datos al formulario y activa editMode
+// función editar: carga datos al formulario
 async function editarAuto(id) {
   try {
     const res = await fetch(`${apiNegocio}/cars/${id}`);
@@ -121,14 +115,13 @@ async function editarAuto(id) {
     marcaInput.value = auto.marca || "";
     modeloInput.value = auto.modelo || "";
     precioInput.value = auto.precioDia || "";
-    disponibleCheckbox.checked = !!auto.disponible; // boolean
+    disponibleSelect.value = auto.disponible ? "true" : "false"; // asignar string
     estadoSelect.value = auto.estadoAuto || "normal";
 
     editMode = true;
     idActual = id;
     submitAutoBtn.textContent = "Actualizar Auto";
     cancelEditBtn.style.display = "inline-block";
-    // desplazar la vista al formulario
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (err) {
     console.error(err);
@@ -139,7 +132,7 @@ async function editarAuto(id) {
 // cancelar edición
 function cancelarEdicion() {
   formAuto.reset();
-  disponibleCheckbox.checked = true;
+  disponibleSelect.value = "true"; // default Disponible
   estadoSelect.value = "normal";
   editMode = false;
   idActual = null;

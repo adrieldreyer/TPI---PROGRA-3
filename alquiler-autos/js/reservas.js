@@ -1,4 +1,4 @@
-const apiNegocio = "https://6915009984e8bd126af85a40.mockapi.io/ReservasAutos/"; // <-- reemplazá con tu endpoint real
+const apiNegocio = "https://6915009984e8bd126af85a40.mockapi.io/ReservasAutos/";
 
 const logoutBtn = document.getElementById("logoutBtn");
 const busqueda = document.getElementById("busqueda");
@@ -93,9 +93,51 @@ async function cargarReservas() {
         <p>Hasta: ${r.fechaFin}</p>
         <p>Total: 💲${r.total}</p>
         <p>Estado: <strong>${r.estado}</strong></p>
+
+        <button class="btn-delete-reserva" data-id="${r.id}" data-car="${r.carId}">
+          ❌ Cancelar reserva
+        </button>
       </div>
     `).join("")
     : "<p>No tienes reservas aún.</p>";
+
+  // asignar eventos
+  document.querySelectorAll(".btn-delete-reserva").forEach(btn => {
+    btn.addEventListener("click", () => {
+      eliminarReserva(btn.dataset.id, btn.dataset.car);
+    });
+  });
+}
+
+async function eliminarReserva(id, carId) {
+  if (!confirm("¿Seguro que deseas cancelar esta reserva?")) return;
+
+  try {
+    // 1. Eliminar la reserva
+    await fetch(`${apiNegocio}/rentals/${id}`, {
+      method: "DELETE"
+    });
+
+    // 2. Volver disponible el auto
+    const resAuto = await fetch(`${apiNegocio}/cars/${carId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        disponible: true,
+        estadoAuto: "disponible"
+      })
+    });
+
+    const data = await resAuto.json();
+    console.log("AUTO ACTUALIZADO:", data);
+
+    alert("Reserva cancelada y auto liberado");
+    cargarReservas();
+
+  } catch (err) {
+    console.error(err);
+    alert("Error al cancelar la reserva");
+  }
 }
 
 cargarAutos();

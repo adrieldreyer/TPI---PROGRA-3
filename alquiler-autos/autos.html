@@ -23,13 +23,14 @@
   <input type="text" id="modelo" placeholder="Modelo" required>
   <input type="number" id="precioDia" placeholder="Precio por día" required>
 
-  <!-- Ahora usamos checkbox para disponible (true/false) -->
-  <label>
-    <input type="checkbox" id="disponibleCheckbox" checked>
-    Disponible
-  </label>
 
-  <!-- Campo separado para indicar estado específico del auto -->
+  <label for="disponibleSelect">Disponibilidad:</label>
+  <select id="disponibleSelect">
+    <option value="true">Disponible</option>
+    <option value="false">No Disponible</option>
+  </select>
+
+
   <label for="estadoAuto">Estado del auto</label>
   <select id="estadoAuto">
     <option value="disponible">Disponible</option>
